@@ -1,0 +1,18 @@
+<form [formGroup]="depositForm" (ngSubmit)="onSubmit()">
+  <div class="form-group" *ngFor="let fa of formAttributes">
+    <label [for]="fa.attr_key">{{fa.attr_title}}: </label>
+    <ng-container [ngSwitch]="fa.attr_type">
+      <input type="text" name="fa.attr_key" [placeholder]="fa.attr_title" [formControlName]="fa.attr_key" *ngSwitchCase="'string'">
+      <input type="number" min="0" [name]="fa.attr_key" [placeholder]="fa.attr_title" [formControlName]="fa.attr_key" *ngSwitchCase="'number'">
+      <input type="date" [name]="fa.attr_key" [placeholder]="fa.attr_title" [formControlName]="fa.attr_key" *ngSwitchCase="'date'">
+    </ng-container>
+    <div *ngIf="depositForm.controls[fa.attr_key].invalid && (depositForm.controls[fa.attr_key].dirty || depositForm.controls[fa.attr_key].touched)" style="color: red;">
+      <small *ngIf="depositForm.controls[fa.attr_key].errors?.['minlength']">{{fa.attr_title}} must be at least 8 characters long.</small>
+      <small *ngIf="depositForm.controls[fa.attr_key].errors?.['required']">{{fa.attr_title}} is required.</small>
+      <small *ngIf="depositForm.controls[fa.attr_key].errors?.['min']">{{fa.attr_title}} must be greater than 1.</small>
+    </div>
+  </div>
+  <div>
+    <button type="submit" [disabled]="!depositForm.valid">Submit</button>
+  </div>
+</form>
